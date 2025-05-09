@@ -17,7 +17,7 @@ como o uso de **construtores**, **encapsulamento**, e **coleções**.
 - Java 17+
 - Paradigma de Programação Orientada a Objetos (POO)
 - Coleções Java (List, Map, etc.)
-- IDE: IntelliJ IDEA / Eclipse (à escolha da equipe)
+- IDE: IntelliJ IDEA
 - (Opcional) JUnit para testes
 
 ## 👥 Integrantes
