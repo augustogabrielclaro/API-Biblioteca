@@ -43,4 +43,8 @@ public class LivroService {
 
         return livroMapper.toDTO(livroRepository.save(livroExistente));
     }
+
+    public void deletarPorId(Long id) {
+        livroRepository.deleteById(id);
+    }
 }
