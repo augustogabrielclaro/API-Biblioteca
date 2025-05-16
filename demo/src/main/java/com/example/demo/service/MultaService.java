@@ -6,26 +6,38 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.Entities.Emprestimo;
 import com.example.demo.Entities.Multa;
 import com.example.demo.dto.MultaDTO;
-import com.example.demo.mapper.MultaMapper;
-import com.example.demo.repository.MultaRepository;
+import com.example.demo.mapper.IMultaMapper;
+import com.example.demo.repository.IEmprestimoRepository;
+import com.example.demo.repository.IMultaRepository;
 
 @Service
 public class MultaService {
     
     @Autowired
-    private MultaRepository multaRepository;
+    private IMultaRepository multaRepository;
 
     @Autowired
-    private MultaMapper multaMapper;
+    private IMultaMapper multaMapper;
+
+    @Autowired
+    private IEmprestimoRepository emprestimoRepository;
 
     public List<MultaDTO> listarTodos() {
         return multaMapper.toDTOList(multaRepository.findAll());
     }
 
     public MultaDTO salvar(MultaDTO multaDTO) {
-        Multa multa = multaMapper.toEntity(multaDTO);
+        Emprestimo emprestimo = emprestimoRepository.findById(multaDTO.getEmprestimo_id()).
+                                orElseThrow(() -> new RuntimeException("Empréstimo não encontrado!"));
+
+        Multa multa = new Multa();
+        multa.setValor(multaDTO.getValor());
+        multa.setStatus(multaDTO.getStatus());
+        multa.setDataPagamento(multaDTO.getDataPagamento());
+        multa.setEmprestimo(emprestimo);
 
         return multaMapper.toDTO(multaRepository.save(multa));
     }
@@ -35,6 +47,10 @@ public class MultaService {
     }
 
     public void deletar(Long id) {
+        if (!multaRepository.existsById(id)) {
+            throw new RuntimeException("Multa com o ID " + id + " não encontrado!");
+        }
+        
         multaRepository.deleteById(id);
     }
 }
