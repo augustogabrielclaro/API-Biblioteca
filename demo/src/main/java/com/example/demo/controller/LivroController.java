@@ -57,7 +57,7 @@ public class LivroController {
     }
 
     @Operation(summary = "Busca todos os livros do banco", description = "Retorna todos os livros")
-    @GetMapping
+    @GetMapping("/{id}")
     public ResponseEntity<List<LivroDTO>> buscaTodos() {
         List<LivroDTO> livrosDTO = livroService.listarTodos();
 
@@ -73,11 +73,15 @@ public class LivroController {
     public ResponseEntity<LivroDTO> buscaPorId(@PathVariable Long id) {
         Optional<LivroDTO> livroDTO = livroService.buscarPorId(id);
 
+        if (livroDTO.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
         return livroDTO.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @Operation(summary = "Deleta um livro do sistema")
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletaPorId(@PathVariable Long id) {
         livroService.deletarPorId(id);
 
