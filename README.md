@@ -23,7 +23,7 @@ como o uso de **construtores**, **encapsulamento**, e **coleções**.
 ## 👥 Integrantes
 Augusto Gabriel Claro
 Hugo Cesar Fernandes de Macedo
-Pedro Augusto Gerhard
+Pedro Augusto Gerhard de Carvalho
 Wesley Nobuyuki Tomimori Waterkemper
 Thiago Santos de Carvalho
 
