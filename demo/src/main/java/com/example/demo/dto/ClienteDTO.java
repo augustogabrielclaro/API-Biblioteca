@@ -8,18 +8,18 @@ public class ClienteDTO {
 
     private long id;
 
-    @NotBlank
+    @NotBlank(message = "Campo nome obrigatorio")
     @Size(min = 2, max = 100)
     private String nome;
 
-    @NotBlank
+    @NotBlank(message = "Campo email obrigatorio")
     @Email
     private String email;
 
-    @NotBlank
+    @NotBlank(message = "Telefone obrigatorio para contato")
     private String telefone;
 
-    @NotBlank
+    @NotBlank(message = "Campo endereco obrigatorio")
     private String endereco;
 
     public Long getId() { return id; }
