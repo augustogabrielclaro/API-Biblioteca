@@ -21,10 +21,10 @@ como o uso de **construtores**, **encapsulamento**, e **coleções**.
 - (Opcional) JUnit para testes
 
 ## 👥 Integrantes
-Augusto Gabriel Claro
-Hugo Cesar Fernandes de Macedo
-Pedro Augusto Gerhard de Carvalho
-Wesley Nobuyuki Tomimori Waterkemper
+Augusto Gabriel Claro |
+Hugo Cesar Fernandes de Macedo |
+Pedro Augusto Gerhard de Carvalho |
+Wesley Nobuyuki Tomimori Waterkemper |
 Thiago Santos de Carvalho
 
 📌 Observações
