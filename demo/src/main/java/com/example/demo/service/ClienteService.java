@@ -9,13 +9,13 @@ import org.springframework.stereotype.Service;
 import com.example.demo.Entities.Cliente;
 import com.example.demo.dto.ClienteDTO;
 import com.example.demo.mapper.IClienteMapper;
-import com.example.demo.repository.ClienteRepository;
+import com.example.demo.repository.IClienteRepository;
 
 @Service
 public class ClienteService {
 
     @Autowired
-    private ClienteRepository clienteRepository;
+    private IClienteRepository clienteRepository;
 
     @Autowired
     private IClienteMapper iclienteMapper;

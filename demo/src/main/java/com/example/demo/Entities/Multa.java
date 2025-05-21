@@ -3,9 +3,12 @@ package com.example.demo.Entities;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import com.example.demo.enums.StatusMulta;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -27,8 +30,9 @@ public class Multa {
 
     private BigDecimal valor;
 
-    private String status;
-
+    @Enumerated(EnumType.STRING)
+    private StatusMulta status;
+    
     private LocalDateTime dataPagamento;
 
     @ManyToOne

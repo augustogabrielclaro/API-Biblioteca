@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.example.demo.Entities.Emprestimo;
 import com.example.demo.Entities.Multa;
 import com.example.demo.dto.MultaDTO;
+import com.example.demo.enums.StatusMulta;
 import com.example.demo.mapper.IMultaMapper;
 import com.example.demo.repository.IEmprestimoRepository;
 import com.example.demo.repository.IMultaRepository;
@@ -33,10 +35,9 @@ public class MultaService {
         Emprestimo emprestimo = emprestimoRepository.findById(multaDTO.getEmprestimo_id()).
                                 orElseThrow(() -> new RuntimeException("Empréstimo não encontrado!"));
 
-        Multa multa = new Multa();
-        multa.setValor(multaDTO.getValor());
-        multa.setStatus(multaDTO.getStatus());
-        multa.setDataPagamento(multaDTO.getDataPagamento());
+        if (multaDTO.getValor().compareTo(BigDecimal.ZERO) <= 0) throw new IllegalArgumentException("O valor não pode ser negativo");
+        
+        Multa multa = multaMapper.toEntity(multaDTO);
         multa.setEmprestimo(emprestimo);
 
         return multaMapper.toDTO(multaRepository.save(multa));
@@ -52,5 +53,22 @@ public class MultaService {
         }
         
         multaRepository.deleteById(id);
+    }
+
+    public MultaDTO sobrescreverMulta(Long id, MultaDTO multaDTO) {
+        Multa multa = multaRepository.findById(id).
+                                orElseThrow(() -> new RuntimeException("Multa não encontrada!"));
+        
+        Emprestimo emprestimo = emprestimoRepository.findById(multaDTO.getEmprestimo_id()).
+                                orElseThrow(() -> new RuntimeException("Empréstimo não encontrado!"));
+        
+        if (multaDTO.getValor().compareTo(BigDecimal.ZERO) <= 0) throw new IllegalArgumentException("O valor não pode ser negativo");
+        
+        multa.setEmprestimo(emprestimo);
+        multa.setDataPagamento(multaDTO.getDataPagamento());
+        multa.setStatus(StatusMulta.fromCodigo(multaDTO.getStatusCode()));
+        multa.setValor(multaDTO.getValor());
+        
+        return multaMapper.toDTO(multaRepository.save(multa));
     }
 }

@@ -3,10 +3,9 @@ package com.example.demo.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.example.demo.Entities.Cliente;
+import com.example.demo.Entities.Reserva;
 
 @Repository
-public interface ClienteRepository extends JpaRepository<Cliente, Long> {
+public interface IReservaRepository extends JpaRepository<Reserva, Long> {
 
-    boolean existsByEmail(String email);
 }
