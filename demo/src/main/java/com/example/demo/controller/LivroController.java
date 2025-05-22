@@ -17,9 +17,9 @@ import com.example.demo.dto.LivroDTO;
 import com.example.demo.service.LivroService;
 import com.example.demo.service.Utils.ApiResponse;
 import com.example.demo.service.Utils.ErrorResponse;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
@@ -57,7 +57,7 @@ public class LivroController {
     }
 
     @Operation(summary = "Busca todos os livros do banco", description = "Retorna todos os livros")
-    @GetMapping("/{id}")
+    @GetMapping
     public ResponseEntity<List<LivroDTO>> buscaTodos() {
         List<LivroDTO> livrosDTO = livroService.listarTodos();
 
@@ -69,15 +69,23 @@ public class LivroController {
     }
 
     @Operation(summary = "Busca um livro por ID", description = "Retorna os detalhes de um livro esperado")
-    @GetMapping
+    @GetMapping("/{id}")
     public ResponseEntity<LivroDTO> buscaPorId(@PathVariable Long id) {
         Optional<LivroDTO> livroDTO = livroService.buscarPorId(id);
 
-        if (livroDTO.isEmpty()) {
+        return livroDTO.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @Operation(summary = "Busca todos os livros disponiveis para empréstimo", description = "Retornavar os livros disponiveis")
+    @GetMapping("/disponiveis")
+    public ResponseEntity<List<LivroDTO>> buscaLivrosDisponiveis() {
+        List<LivroDTO> livrosDisponiveis = livroService.listarLivrosDisponiveis();
+
+        if (livrosDisponiveis.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
 
-        return livroDTO.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        return ResponseEntity.ok(livrosDisponiveis);
     }
 
     @Operation(summary = "Deleta um livro do sistema")
