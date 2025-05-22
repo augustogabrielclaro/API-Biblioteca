@@ -32,6 +32,10 @@ public class LivroService {
         return livroRepository.findById(id).map(livroMapper::toDTO);
     }
 
+    public List<LivroDTO> listarLivrosDisponiveis() {
+        return livroMapper.toDTOList(livroRepository.buscarLivrosDisponiveis());
+    }
+
     public LivroDTO atualizar(Long id, LivroDTO livroDTO) {
         Livro livroExistente = livroRepository.findById(id).orElseThrow(() -> new RuntimeException("Livro não encontrado"));
         
