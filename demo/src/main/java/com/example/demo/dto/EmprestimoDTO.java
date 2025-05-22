@@ -2,6 +2,7 @@ package com.example.demo.dto;
 
 import java.time.LocalDateTime;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,6 +21,7 @@ public class EmprestimoDTO {
     @NotBlank(message = "Data de Devolução obrigatoria")
     private LocalDateTime dataDevolucao;
     
+    @Schema(description = "Código do status do emprestimo", example = "(1) Em Andamento (2) Concluído (3) Atrasado")
     @NotBlank(message = "Campo Status Obrigatoria")
     private String status;
 

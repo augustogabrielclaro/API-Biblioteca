@@ -83,7 +83,7 @@ public class EmprestimoController {
     }
 
     @Operation(summary = "Registrar devolucao", description = "Método de registrar devolucao do livro")
-    @PatchMapping("/devolucao")
+    @PatchMapping("/Devolucao")
      public ResponseEntity<Void> Devolucao(@PathVariable Long id){
 
         emprestimoservice.registrarDevolucao(id);
