@@ -29,4 +29,5 @@ public class EmprestimoDTO {
     @NotBlank(message = "Id Cliente obrigatoria")
     private Long clienteId;
 
+
 }
