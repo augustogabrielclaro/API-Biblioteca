@@ -9,34 +9,34 @@ import org.springframework.stereotype.Service;
 import com.example.demo.Entities.Cliente;
 import com.example.demo.dto.ClienteDTO;
 import com.example.demo.mapper.IClienteMapper;
-import com.example.demo.repository.ClienteRepository;
+import com.example.demo.repository.IClienteRepository;
 
 
 @Service
 public class ClienteService {
 
     @Autowired
-    private ClienteRepository clienteRepository;
+    private IClienteRepository iclienteRepository;
 
     @Autowired
     private IClienteMapper iclienteMapper;
 
     public List<ClienteDTO> listarTodos() {
-        return iclienteMapper.toDTOList(clienteRepository.findAll());
+        return iclienteMapper.toDTOList(iclienteRepository.findAll());
     }
 
     public ClienteDTO salvar(ClienteDTO clienteDTO) {
         Cliente cliente = iclienteMapper.toEntity(clienteDTO);
 
-        return iclienteMapper.toDTO(clienteRepository.save(cliente));
+        return iclienteMapper.toDTO(iclienteRepository.save(cliente));
     }
 
     public Optional<ClienteDTO> buscarPorId(Long id) {
-        return clienteRepository.findById(id).map(iclienteMapper::toDTO);
+        return iclienteRepository.findById(id).map(iclienteMapper::toDTO);
     }
 
     public ClienteDTO atualizar(Long id, ClienteDTO clienteDTO) {
-        Optional<Cliente> clienteOptional = clienteRepository.findById(id);
+        Optional<Cliente> clienteOptional = iclienteRepository.findById(id);
 
         if (clienteOptional.isEmpty()) {
             throw new IllegalArgumentException("Cliente com ID " + id + " não encontrado.");
@@ -49,12 +49,12 @@ public class ClienteService {
         cliente.setTelefone(clienteDTO.getTelefone());
         cliente.setEndereco(clienteDTO.getEndereco());
 
-        Cliente clienteAtualizado = clienteRepository.save(cliente);
+        Cliente clienteAtualizado = iclienteRepository.save(cliente);
         return new ClienteDTO(clienteAtualizado.getId(), clienteAtualizado.getNome(), clienteAtualizado.getEmail(),
                    clienteAtualizado.getTelefone(), clienteAtualizado.getEndereco());
     }
 
     public void deletar(Long id) {
-        clienteRepository.deleteById(id);
+        iclienteRepository.deleteById(id);
     }
 }
