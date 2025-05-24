@@ -42,7 +42,6 @@ public class LivroService {
         livroExistente.setTitulo(livroDTO.getTitulo());
         livroExistente.setAutor(livroDTO.getAutor());
         livroExistente.setIsbn(livroDTO.getIsbn());
-        livroExistente.setQuantidade(livroDTO.getQuantidade());
         livroExistente.setCategoria(livroDTO.getCategoria());
 
         return livroMapper.toDTO(livroRepository.save(livroExistente));

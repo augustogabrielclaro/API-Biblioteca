@@ -24,9 +24,6 @@ public class LivroDTO {
     )
     private String isbn;
 
-    @Min(value = 0, message = "Quantidade do Livro é obrigatório")
-    private int quantidade;
-
     @NotBlank(message = "Categoria do Livro é obrigatório")
     private String categoria;
 }

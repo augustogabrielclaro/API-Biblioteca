@@ -27,9 +27,6 @@ public class Livro {
 
     @Column(nullable = false, unique = true, name = "isbn")
     private  String isbn;
-    
-    @Column(nullable = false, name = "quantidade")
-    private int quantidade;
 
     @Column(nullable = false, name = "categoria")
     private String categoria;
