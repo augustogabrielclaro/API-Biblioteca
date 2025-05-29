@@ -37,63 +37,55 @@ public class EmprestimoController {
     @Autowired
     private EmprestimoService emprestimoservice;
 
-      @Operation(summary = "Registrar Emprestimo", description = "Método  Registra um novo empréstimo de livro para um cliente")
-     @PostMapping()
-    public ResponseEntity<ApiResponse<EmprestimoDTO>>registrarEmprestimo(@Valid @RequestBody EmprestimoDTO emprestimoDTO) {
+    @Operation(summary = "Registrar Emprestimo", description = "Método  Registra um novo empréstimo de livro para um cliente")
+    @PostMapping()
+    public ResponseEntity<ApiResponse<EmprestimoDTO>> registrarEmprestimo(
+            @Valid @RequestBody EmprestimoDTO emprestimoDTO) {
         try {
-        
-        EmprestimoDTO emprestimoSalvo = emprestimoservice.salvar(emprestimoDTO);
 
-        ApiResponse<EmprestimoDTO> response = new ApiResponse<>(emprestimoSalvo);
+            EmprestimoDTO emprestimoSalvo = emprestimoservice.salvar(emprestimoDTO);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+            ApiResponse<EmprestimoDTO> response = new ApiResponse<>(emprestimoSalvo);
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
 
         } catch (IllegalArgumentException e) {
-         ErrorResponse errorResponse = new ErrorResponse("Argumento inválido", e.getMessage());
-         ApiResponse<EmprestimoDTO> response = new ApiResponse<>(errorResponse);
-          return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+            ErrorResponse errorResponse = new ErrorResponse("Argumento inválido", e.getMessage());
+            ApiResponse<EmprestimoDTO> response = new ApiResponse<>(errorResponse);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
-}
+    }
 
     @Operation(summary = "Atualizar Status de emprestimo", description = "Método de alterar Status de um emprestimo")
     @PatchMapping("/Status")
-    public ResponseEntity <Void> AtualizarStatus(@PathVariable Long id,@RequestBody @Valid  EmprestimoDTO emprestimo) {
+    public ResponseEntity<Void> AtualizarStatus(@PathVariable Long id, @RequestBody @Valid EmprestimoDTO emprestimo) {
 
-        emprestimoservice.AtualizarStatus(id, emprestimo.getStatus());
+        emprestimoservice.AtualizarStatus(id, emprestimo.getStatusCode());
         return ResponseEntity.noContent().build();
+    }
 
-    }  
-
-   @Operation(summary = "Consultar Empréstimos por Cliente", description ="Metódo consulta por id cliente")
+    @Operation(summary = "Consultar Empréstimos por Cliente", description = "Metódo consulta por id cliente")
     @GetMapping("/{id}")
-    public  ResponseEntity <EmprestimoDTO> buscarporID(@PathVariable Long Id) {
+    public ResponseEntity<EmprestimoDTO> buscarporID(@PathVariable Long Id) {
 
         Optional<EmprestimoDTO> emprestimosDTO = emprestimoservice.buscarPorId(Id);
-
-        return emprestimosDTO.map(ResponseEntity::ok).orElseGet(()-> ResponseEntity.notFound().build());
+        return emprestimosDTO.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @Operation(summary = "Consultar Emprestimos atrasados", description = "Método de Consultar emprestimo com data de devolução atrasados")
     @GetMapping("/dataDevolucao")
-    public ResponseEntity <List<EmprestimoDTO>> emprestimoAtrasados () {
-        
-        List<EmprestimoDTO> atrasados = emprestimoservice.buscaAtrasados();
+    public ResponseEntity<List<EmprestimoDTO>> emprestimoAtrasados() {
 
+        List<EmprestimoDTO> atrasados = emprestimoservice.buscaAtrasados();
         return ResponseEntity.ok(atrasados);
     }
 
     @Operation(summary = "Registrar devolucao", description = "Método de registrar devolucao do livro")
     @PatchMapping("/Devolucao")
-     public ResponseEntity<Void> Devolucao(@PathVariable Long id){
+    public ResponseEntity<Void> Devolucao(@PathVariable Long id) {
 
         emprestimoservice.registrarDevolucao(id);
-
         return ResponseEntity.noContent().build();
-     }
-    
-    
-
-    
-
+    }
 
 }

@@ -3,6 +3,7 @@ package com.example.demo.Entities;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.example.demo.enums.StatusEmprestimo;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -20,13 +21,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 @Entity
 @Table(name = "emprestimos")
 @Data
-@AllArgsConstructor @NoArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 
 public class Emprestimo {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -44,12 +47,12 @@ public class Emprestimo {
 
     @Column(nullable = false)
     private LocalDateTime dataDevolucao;
-
-    @Enumerated(EnumType.STRING)
+    
     @Column(nullable = false)
-    private String Status;
+    @Enumerated(EnumType.STRING)
+    private StatusEmprestimo Status;
 
     @OneToMany(mappedBy = "emprestimo")
     private List<Multa> multas;
-    
+
 }
