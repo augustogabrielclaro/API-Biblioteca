@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.MultaDTO;
+import com.example.demo.dto.MultaDTOPatch;
 import com.example.demo.service.MultaService;
 import com.example.demo.service.Utils.ApiResponse;
 import com.example.demo.service.Utils.ErrorResponse;
@@ -20,8 +21,10 @@ import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 
@@ -82,5 +85,52 @@ public class MultaController {
         return ResponseEntity.noContent().build();
     }
 
+    @Operation(summary = "Atualiza uma multa por completo", description = "Método para atualizar uma multa do banco de dados por completo")
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse<MultaDTO>> atualizarMulta(@PathVariable Long id, @Valid @RequestBody MultaDTO multaDTO) {
+        try {
+            MultaDTO savedMulta = multaService.sobrescreverMulta(id, multaDTO);
+
+            ApiResponse<MultaDTO> response = new ApiResponse<>(savedMulta);
+
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(response);
+        } catch (IllegalArgumentException e) {
+            ErrorResponse errorResponse = new ErrorResponse("Argumento inválido!", e.getMessage());
+
+            ApiResponse<MultaDTO> response = new ApiResponse<>(errorResponse);
+
+            return ResponseEntity.badRequest().body(response);
+        } catch (Exception e) {
+            ErrorResponse errorResponse = new ErrorResponse("Erro interno", e.getMessage());
+
+            ApiResponse<MultaDTO> response = new ApiResponse<>(errorResponse);
+
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+    @Operation(summary = "Atualiza os campos desejados da multa", description = "Método para atualizar os campos desejados de uma multa do banco de dados")
+    @PatchMapping("/{id}")
+    public ResponseEntity<ApiResponse<MultaDTO>> metodoPatch(@PathVariable Long id, @Valid @RequestBody MultaDTOPatch multaDTO) {
+        try {
+            MultaDTO savedMulta = multaService.metodoPatch(id, multaDTO);
+
+            ApiResponse<MultaDTO> response = new ApiResponse<>(savedMulta);
+
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(response);
+        } catch (IllegalArgumentException e) {
+            ErrorResponse errorResponse = new ErrorResponse("Argumento inválido!", e.getMessage());
+
+            ApiResponse<MultaDTO> response = new ApiResponse<>(errorResponse);
+
+            return ResponseEntity.badRequest().body(response);
+        } catch (Exception e) {
+            ErrorResponse errorResponse = new ErrorResponse("Erro interno", e.getMessage());
+
+            ApiResponse<MultaDTO> response = new ApiResponse<>(errorResponse);
+
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
 
 }
