@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.example.demo.enums.StatusEmprestimo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -36,10 +37,12 @@ public class Emprestimo {
 
     @ManyToOne
     @JoinColumn(name = "clientesId")
+    @JsonIgnore
     private Cliente cliente;
 
     @ManyToOne
     @JoinColumn(name = "livroId")
+    @JsonIgnore
     private Livro livro;
 
     @Column(nullable = false)
@@ -50,7 +53,7 @@ public class Emprestimo {
     
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private StatusEmprestimo Status;
+    private StatusEmprestimo status;
 
     @OneToMany(mappedBy = "emprestimo")
     private List<Multa> multas;
