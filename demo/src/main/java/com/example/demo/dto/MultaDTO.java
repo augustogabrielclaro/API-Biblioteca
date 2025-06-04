@@ -18,8 +18,8 @@ public class MultaDTO {
     @NotNull(message = "Valor da multa é obrigatório!")
     private BigDecimal valor;
 
-    @Schema(description = "Código do status da multa", example = "(1) Pendente (2) Paga (3) Cancelada")
-    @NotNull(message = "Codigo de status da multa é obrigatório!")    
+    @Schema(description = "Código do status da multa: (1) Pendente (2) Paga (3) Cancelada", example = "2")
+    @NotNull(message = "Código de status da multa é obrigatório!")    
     private Integer statusCode;
 
     @Schema(description = "Data do pagamento da multa", example = "2025-05-21T10:00:00")
