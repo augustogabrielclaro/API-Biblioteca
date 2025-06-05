@@ -14,7 +14,7 @@ public class MultaDTO {
     @Schema(description = "ID da multa", example = "1")
     private Long id;
 
-    @Schema(description = "Valor da multa", example = "4.50")
+    @Schema(description = "Valor por dia de atraso", example = "2.50")
     @NotNull(message = "Valor da multa é obrigatório!")
     private BigDecimal valor;
 
