@@ -3,8 +3,7 @@ package com.example.demo.controller;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.EmprestimoDTO;
-import com.example.demo.dto.MultaDTO;
-import com.example.demo.dto.MultaDTOPatch;
+import com.example.demo.dto.EmprestimoDTOPost;
 import com.example.demo.service.EmprestimoService;
 import com.example.demo.service.Utils.ApiResponse;
 import com.example.demo.service.Utils.ErrorResponse;
@@ -18,7 +17,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -40,7 +38,7 @@ public class EmprestimoController {
     @Operation(summary = "Registrar Emprestimo", description = "Método  Registra um novo empréstimo de livro para um cliente")
     @PostMapping()
     public ResponseEntity<ApiResponse<EmprestimoDTO>> registrarEmprestimo(
-            @Valid @RequestBody EmprestimoDTO emprestimoDTO) {
+            @Valid @RequestBody EmprestimoDTOPost emprestimoDTO) {
         try {
 
             EmprestimoDTO emprestimoSalvo = emprestimoservice.salvar(emprestimoDTO);
@@ -51,7 +49,9 @@ public class EmprestimoController {
 
         } catch (IllegalArgumentException e) {
             ErrorResponse errorResponse = new ErrorResponse("Argumento inválido", e.getMessage());
+
             ApiResponse<EmprestimoDTO> response = new ApiResponse<>(errorResponse);
+
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
     }
@@ -72,7 +72,7 @@ public class EmprestimoController {
             return ResponseEntity.notFound().build();
         }
          return ResponseEntity.ok(emprestimos);
-}
+    }
 
     @Operation(summary = "Consultar Emprestimos atrasados", description = "Método de Consultar emprestimo com data de devolução atrasados")
     @GetMapping("/atrasados")
@@ -92,7 +92,7 @@ public class EmprestimoController {
 
 
     @Operation(summary = "Buscar todos Emprestimos", description = "Método de consultar todos os emprestimo")
-    @PatchMapping("/todosEmprestimo")
+    @GetMapping("/todosEmprestimo")
     public ResponseEntity <List<EmprestimoDTO>> listarTodos(){
         List<EmprestimoDTO> emprestimosAtivos = emprestimoservice.listarTodos();
 
@@ -131,30 +131,5 @@ public class EmprestimoController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
-
-    @Operation(summary = "Atualiza os campos desejados do empréstimo", description = "Método para atualizar os campos desejados de um empréstimo do banco de dados")
-    @PatchMapping("/{id}")
-    public ResponseEntity<ApiResponse<EmprestimoDTO>> metodoPatch(@PathVariable Long id,@RequestBody EmprestimoDTO emprestimodto) {
-        try {
-            EmprestimoDTO saveEmprestimo = emprestimoservice.metodoPatch(id, emprestimodto);
-
-            ApiResponse<EmprestimoDTO> response = new ApiResponse<>(saveEmprestimo);
-
-            return ResponseEntity.status(HttpStatus.OK).body(response);
-        } catch (IllegalArgumentException e) {
-            ErrorResponse errorResponse = new ErrorResponse("Argumento inválido!", e.getMessage());
-
-            ApiResponse<EmprestimoDTO> response = new ApiResponse<>(errorResponse);
-
-            return ResponseEntity.badRequest().body(response);
-        } catch (Exception e) {
-            ErrorResponse errorResponse = new ErrorResponse("Erro interno", e.getMessage());
-
-            ApiResponse<EmprestimoDTO> response = new ApiResponse<>(errorResponse);
-
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);     
-           }
-    }
-
 
 }

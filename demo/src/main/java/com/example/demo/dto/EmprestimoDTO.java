@@ -3,8 +3,7 @@ package com.example.demo.dto;
 import java.time.LocalDateTime;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.FutureOrPresent;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,24 +13,27 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class EmprestimoDTO {
 
+    @Schema(description = "Id do Emprestimo")
     private Long id;
 
-    @NotBlank(message = "Data de empréstimo obrigatoria")
-    @FutureOrPresent(message = "Data de empréstimo não pode estar no passado")
+    @Schema(description = "Data do emprestimo realizado")
+    @NotNull(message = "Data de empréstimo obrigatoria")
     private LocalDateTime dataEmprestimo;
 
-    @NotBlank(message = "Data de Devolução obrigatoria")
+    @Schema(description = "Data de Devolução do empréstimo")
+    @NotNull(message = "Data de Devolução obrigatoria")
     private LocalDateTime dataDevolucao;
-    
 
     @Schema(description = "Código do status do empréstimo", example = "(1) Em Andamento (2) Concluído (3) Atrasado")
-    @NotBlank(message = "Campo Status Obrigatoria")
+    @NotNull(message = "Campo Status Obrigatoria")
     private Integer statusCode;
 
-    @NotBlank(message = "id livro obrigatoria")
+    @Schema(description = "Id do Livro relacionado com Empréstimo")
+    @NotNull(message = "id livro obrigatoria")
     private Long livroId;
 
-    @NotBlank(message = "Id Cliente obrigatoria")
+    @Schema(description = "Id do Cliente relacionado com Empréstimo")
+    @NotNull(message = "Id Cliente obrigatoria")
     private Long clienteId;
 
 }

@@ -1,6 +1,5 @@
 package com.example.demo.service;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -12,12 +11,9 @@ import org.springframework.stereotype.Service;
 import com.example.demo.Entities.Cliente;
 import com.example.demo.Entities.Emprestimo;
 import com.example.demo.Entities.Livro;
-import com.example.demo.Entities.Multa;
 import com.example.demo.dto.EmprestimoDTO;
-import com.example.demo.dto.MultaDTO;
-import com.example.demo.dto.MultaDTOPatch;
+import com.example.demo.dto.EmprestimoDTOPost;
 import com.example.demo.enums.StatusEmprestimo;
-import com.example.demo.enums.StatusMulta;
 import com.example.demo.mapper.IEmprestimoMapper;
 import com.example.demo.repository.IClienteRepository;
 import com.example.demo.repository.IEmprestimoRepository;
@@ -38,19 +34,21 @@ public class EmprestimoService {
     @Autowired
     private IEmprestimoMapper emprestimoMapper;
 
-    public EmprestimoDTO salvar(EmprestimoDTO emprestimoDTO) {
+    public EmprestimoDTO salvar(EmprestimoDTOPost emprestimoDTO) {
         Cliente cliente = clienteRepository.findById(emprestimoDTO.getClienteId())
                 .orElseThrow(() -> new RuntimeException("Cliente nao encontrado"));
 
         Livro livro = livroRepository.findById(emprestimoDTO.getLivroId())
                 .orElseThrow(() -> new RuntimeException("Livro nao enontrado"));
 
-        Emprestimo emprestimo = emprestimoMapper.toEntity(emprestimoDTO);
+        Emprestimo emprestimo = new Emprestimo();
+        emprestimo.setStatus(StatusEmprestimo.EM_ANDAMENTO);
+        emprestimo.setDataEmprestimo(LocalDateTime.now());
+        LocalDateTime dataDevolucao = emprestimo.getDataEmprestimo().plusDays(30);
+        emprestimo.setDataDevolucao(dataDevolucao);
         emprestimo.setCliente(cliente);
         emprestimo.setLivro(livro);
-
         return emprestimoMapper.toDto(emprestimoRepository.save(emprestimo));
-
     }
 
     public List<EmprestimoDTO> listarTodos() {
@@ -111,28 +109,7 @@ public class EmprestimoService {
         
         return emprestimoMapper.toDto(emprestimoRepository.save(emprestimo));
     }
-    public EmprestimoDTO metodoPatch(Long id, EmprestimoDTO emprestimoDTO) {
-        Emprestimo emprestimo = emprestimoRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Multa não encontrada!"));
-        if (emprestimoDTO.getStatusCode() != null) {
-            emprestimo.setStatus(StatusEmprestimo.fromCodigo(emprestimoDTO.getStatusCode()));
-        }
-        if (emprestimoDTO.getClienteId() != null) {
-            Cliente buscaCliente = clienteRepository.findById(emprestimoDTO.getClienteId()).orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado!"));
-            emprestimo.setCliente(buscaCliente);
-        }
-        if (emprestimoDTO.getLivroId() != null) {
-            Livro buscaLivro = livroRepository.findById(emprestimoDTO.getLivroId()).orElseThrow(() -> new IllegalArgumentException("Livro não encontrado!"));
-            emprestimo.setLivro(buscaLivro);
-        }
-         if (emprestimoDTO.getDataEmprestimo() != null) {
-            emprestimo.setDataEmprestimo(emprestimoDTO.getDataEmprestimo());
-        }
-        if (emprestimoDTO.getDataDevolucao() != null) {
-            emprestimo.setDataDevolucao(emprestimoDTO.getDataDevolucao());
-        }
-
-
-        return emprestimoMapper.toDto(emprestimoRepository.save(emprestimo));
-    }
+  
+    
 
 }
