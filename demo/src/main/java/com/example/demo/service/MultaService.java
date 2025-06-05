@@ -31,7 +31,7 @@ public class MultaService {
     @Autowired
     private IEmprestimoRepository emprestimoRepository;
 
-    private static final BigDecimal TAXA_DIARIA = new BigDecimal(2.0);
+    private static final BigDecimal TAXA_DIARIA = new BigDecimal(6.0);
 
     // GET
     public List<MultaDTO> listarTodos() {
