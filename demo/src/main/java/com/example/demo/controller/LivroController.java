@@ -58,14 +58,21 @@ public class LivroController {
 
     @Operation(summary = "Busca todos os livros do banco", description = "Retorna todos os livros")
     @GetMapping
-    public ResponseEntity<List<LivroDTO>> buscaTodos() {
-        List<LivroDTO> livrosDTO = livroService.listarTodos();
+    public ResponseEntity<ApiResponse<List<LivroDTO>>> buscaTodos() {
+        try {
+            List<LivroDTO> livrosDTO = livroService.listarTodos();
 
-        if (livrosDTO.isEmpty()) {
-            return ResponseEntity.noContent().build();
+            ApiResponse<List<LivroDTO>> response = new ApiResponse<>(livrosDTO);
+
+            return ResponseEntity.ok(response);
         }
+        catch(IllegalArgumentException e) {
+            ErrorResponse error = new ErrorResponse("Argumento inválido:", e.getMessage());
 
-        return ResponseEntity.ok(livrosDTO);
+            ApiResponse<List<LivroDTO>> response = new ApiResponse<>(error);
+
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
     }
 
     @Operation(summary = "Busca um livro por ID", description = "Retorna os detalhes de um livro esperado")
@@ -76,16 +83,23 @@ public class LivroController {
         return livroDTO.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @Operation(summary = "Busca todos os livros disponiveis para empréstimo", description = "Retornavar os livros disponiveis")
+    @Operation(summary = "Busca todos os livros disponiveis para empréstimo", description = "Retorna os livros disponiveis")
     @GetMapping("/disponiveis")
-    public ResponseEntity<List<LivroDTO>> buscaLivrosDisponiveis() {
-        List<LivroDTO> livrosDisponiveis = livroService.listarLivrosDisponiveis();
+    public ResponseEntity<ApiResponse<List<LivroDTO>>> buscaLivrosDisponiveis() {
+        try {
+            List<LivroDTO> livrosDisponiveis = livroService.listarLivrosDisponiveis();
 
-        if (livrosDisponiveis.isEmpty()) {
-            return ResponseEntity.noContent().build();
+            ApiResponse<List<LivroDTO>> response = new ApiResponse<>(livrosDisponiveis);
+
+            return ResponseEntity.ok(response);
         }
+        catch(IllegalArgumentException e) {
+            ErrorResponse error = new ErrorResponse("Argumento invalido", e.getMessage());
 
-        return ResponseEntity.ok(livrosDisponiveis);
+            ApiResponse<List<LivroDTO>> response = new ApiResponse<>(error);
+
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
     }
 
     @Operation(summary = "Deleta um livro do sistema")

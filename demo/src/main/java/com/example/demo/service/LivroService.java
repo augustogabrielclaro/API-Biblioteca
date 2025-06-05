@@ -15,6 +15,7 @@ import com.example.demo.repository.ILivroRepository;
 public class LivroService {
     @Autowired
     private ILivroRepository livroRepository;
+    
     @Autowired
     private ILivroMapper livroMapper;
 
@@ -25,7 +26,13 @@ public class LivroService {
     }
 
     public List<LivroDTO> listarTodos() {
-        return livroMapper.toDTOList(livroRepository.findAll());
+        List<Livro> livros = livroRepository.findAll();
+
+        if (livros.isEmpty()) {
+            new RuntimeException("Nenhum livro foi encontrado");
+        }
+        
+        return livroMapper.toDTOList(livros);
     }
 
     public Optional<LivroDTO> buscarPorId(Long id) {
@@ -33,7 +40,13 @@ public class LivroService {
     }
 
     public List<LivroDTO> listarLivrosDisponiveis() {
-        return livroMapper.toDTOList(livroRepository.buscarLivrosDisponiveis());
+        List<Livro> livros = livroRepository.buscarLivrosDisponiveis();
+
+        if (livros.isEmpty()) {
+            new RuntimeException("Nenhum livro foi encontrado");
+        }
+
+        return livroMapper.toDTOList(livros);
     }
 
     public LivroDTO atualizar(Long id, LivroDTO livroDTO) {
