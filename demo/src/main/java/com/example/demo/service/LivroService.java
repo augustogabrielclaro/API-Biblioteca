@@ -20,6 +20,19 @@ public class LivroService {
     private ILivroMapper livroMapper;
 
     public LivroDTO salvar(LivroDTO livroDTO) {
+        if (livroDTO.getTitulo() == null || livroDTO.getTitulo().isEmpty()) {
+            throw new IllegalArgumentException("O campo titulo não pode estra vazio");
+        }
+        if (livroDTO.getAutor() == null || livroDTO.getAutor().isEmpty()) {
+            throw new IllegalArgumentException("O campo Autor não pode estra vazio");
+        }
+        if (livroDTO.getIsbn() == null || livroDTO.getIsbn().isEmpty()) {
+            throw new IllegalArgumentException("O campo ISBN não pode estar vazio");
+        }
+        if (livroDTO.getCategoria() == null || livroDTO.getCategoria().isEmpty()) {
+            throw new IllegalArgumentException("A campo Categoria não pode estar vazia");
+        }
+
         Livro livro = livroMapper.toEntity(livroDTO);
 
         return livroMapper.toDTO(livroRepository.save(livro));
@@ -52,6 +65,19 @@ public class LivroService {
     public LivroDTO atualizar(Long id, LivroDTO livroDTO) {
         Livro livroExistente = livroRepository.findById(id).orElseThrow(() -> new RuntimeException("Livro não encontrado"));
         
+        if (livroDTO.getTitulo() == null || livroDTO.getTitulo().isEmpty()) {
+            throw new IllegalArgumentException("O campo titulo não pode estra vazio");
+        }
+        if (livroDTO.getAutor() == null || livroDTO.getAutor().isEmpty()) {
+            throw new IllegalArgumentException("O campo Autor não pode estra vazio");
+        }
+        if (livroDTO.getIsbn() == null || livroDTO.getIsbn().isEmpty()) {
+            throw new IllegalArgumentException("O campo ISBN não pode estar vazio");
+        }
+        if (livroDTO.getCategoria() == null || livroDTO.getCategoria().isEmpty()) {
+            throw new IllegalArgumentException("A campo Categoria não pode estar vazia");
+        }
+
         livroExistente.setTitulo(livroDTO.getTitulo());
         livroExistente.setAutor(livroDTO.getAutor());
         livroExistente.setIsbn(livroDTO.getIsbn());

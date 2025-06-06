@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -99,6 +100,32 @@ public class LivroController {
             ApiResponse<List<LivroDTO>> response = new ApiResponse<>(error);
 
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+    }
+
+    @Operation(summary = "Atualiza as informações do livro", description = "Faz a atualização de todas as informações do livro")
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse<LivroDTO>> atualizaLivro(@PathVariable Long id, @Valid @RequestBody LivroDTO livroDTO) {
+        try {
+            LivroDTO livroAtualizado = livroService.atualizar(id, livroDTO);
+
+            ApiResponse<LivroDTO> response = new ApiResponse<>(livroAtualizado);
+
+            return ResponseEntity.ok(response);
+        }
+        catch(IllegalArgumentException e) {
+            ErrorResponse error = new ErrorResponse("Argumento invalido", e.getMessage());
+
+            ApiResponse<LivroDTO> response = new ApiResponse<>(error);
+
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+        catch(Exception e) {
+            ErrorResponse error = new ErrorResponse("Erro interno", e.getMessage());
+
+            ApiResponse<LivroDTO> response = new ApiResponse<>(error);
+
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
 
