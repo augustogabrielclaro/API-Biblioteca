@@ -14,6 +14,7 @@ import com.example.demo.Entities.Multa;
 import com.example.demo.dto.MultaDTO;
 import com.example.demo.dto.MultaDTOPatch;
 import com.example.demo.dto.MultaDTOPost;
+import com.example.demo.dto.MultaDTOPut;
 import com.example.demo.enums.StatusMulta;
 import com.example.demo.mapper.IMultaMapper;
 import com.example.demo.repository.IEmprestimoRepository;
@@ -48,10 +49,10 @@ public class MultaService {
         BigDecimal valor_multa = calcular_valor(TAXA_DIARIA, dias_atraso);
 
         Multa multa = new Multa();
-        multa.setDataPagamento(multaDTO.getDataPagamento());
+        multa.setDataPagamento(LocalDateTime.now().plusDays(2));
         multa.setEmprestimo(emprestimo);
         multa.setValor(valor_multa);
-        multa.setStatus(StatusMulta.fromCodigo(multaDTO.getStatusCode()));
+        multa.setStatus(StatusMulta.PENDENTE);
 
         return multaMapper.toDTO(multaRepository.save(multa));
     }
@@ -71,7 +72,7 @@ public class MultaService {
     }
 
     // PUT
-    public MultaDTO sobrescreverMulta(Long id, MultaDTOPost multaDTO) {
+    public MultaDTO sobrescreverMulta(Long id, MultaDTOPut multaDTO) {
         Multa multa = multaRepository.findById(id).
                                 orElseThrow(() -> new IllegalArgumentException("Multa não encontrada!"));
         
@@ -123,6 +124,7 @@ public class MultaService {
         Long dias_atraso = calcular_dias_atraso(emprestimo);
         BigDecimal valor_multa = calcular_valor(TAXA_DIARIA, dias_atraso);
 
+        multa.setDataPagamento(LocalDateTime.now().plusDays(2));
         multa.setValor(valor_multa);
 
         return multaMapper.toDTO(multaRepository.save(multa));

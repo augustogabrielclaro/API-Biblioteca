@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.dto.MultaDTO;
 import com.example.demo.dto.MultaDTOPatch;
 import com.example.demo.dto.MultaDTOPost;
+import com.example.demo.dto.MultaDTOPut;
 import com.example.demo.service.MultaService;
 import com.example.demo.service.Utils.ApiResponse;
 import com.example.demo.service.Utils.ErrorResponse;
@@ -88,7 +89,7 @@ public class MultaController {
 
     @Operation(summary = "Atualiza uma multa por completo", description = "Método para atualizar uma multa do banco de dados por completo")
     @PutMapping("/{id}/sobrescrever")
-    public ResponseEntity<ApiResponse<MultaDTO>> atualizarMulta(@PathVariable Long id, @Valid @RequestBody MultaDTOPost multaDTO) {
+    public ResponseEntity<ApiResponse<MultaDTO>> atualizarMulta(@PathVariable Long id, @Valid @RequestBody MultaDTOPut multaDTO) {
         try {
             MultaDTO savedMulta = multaService.sobrescreverMulta(id, multaDTO);
 
