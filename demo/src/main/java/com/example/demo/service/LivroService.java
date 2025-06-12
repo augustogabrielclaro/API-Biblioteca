@@ -42,7 +42,7 @@ public class LivroService {
         List<Livro> livros = livroRepository.findAll();
 
         if (livros.isEmpty()) {
-            new RuntimeException("Nenhum livro foi encontrado");
+            throw new RuntimeException("Nenhum livro foi encontrado");
         }
         
         return livroMapper.toDTOList(livros);
@@ -53,13 +53,43 @@ public class LivroService {
     }
 
     public List<LivroDTO> listarLivrosDisponiveis() {
-        List<Livro> livros = livroRepository.buscarLivrosDisponiveis();
+        List<Livro> livrosDisponiveis = livroRepository.buscarLivrosDisponiveis();
 
-        if (livros.isEmpty()) {
-            new RuntimeException("Nenhum livro foi encontrado");
+        if (livrosDisponiveis.isEmpty()) {
+            throw new RuntimeException("Nenhum livro foi encontrado");
         }
 
-        return livroMapper.toDTOList(livros);
+        return livroMapper.toDTOList(livrosDisponiveis);
+    }
+
+    public List<LivroDTO> listarLivrosEmprestados() {
+        List<Livro> livrosEmprestados = livroRepository.buscarLivrosEmprestados();
+
+        if (livrosEmprestados.isEmpty()) {
+            throw new RuntimeException("Nenhum livro foi encontrado");
+        }
+
+        return livroMapper.toDTOList(livrosEmprestados);
+    }
+
+    public List<LivroDTO> listarQuantidadeDeCadaLivro() {
+        List<Livro> quantidadeCadaLivro = livroRepository.buscarQuantidadeDeCadaLivro();
+
+        if (quantidadeCadaLivro.isEmpty()) {
+            throw new RuntimeException("Nenhum livro foi encontrado");
+        }
+
+        return livroMapper.toDTOList(quantidadeCadaLivro);
+    }
+
+    public List<LivroDTO> listarLivroPorTituloAutorCategoria(String pesquisa) {
+        List<Livro> listaDeLivros = livroRepository.buscarLivrosPorTituloAutorCategoriaContendo(pesquisa);
+
+        if (listaDeLivros == null || listaDeLivros.isEmpty()) {
+            throw new RuntimeException("Nenhum livro foi encontrado");
+        }
+
+        return livroMapper.toDTOList(listaDeLivros);
     }
 
     public LivroDTO atualizar(Long id, LivroDTO livroDTO) {
